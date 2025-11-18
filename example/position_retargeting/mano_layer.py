@@ -27,7 +27,7 @@ class MANOLayer(Module):
             flat_hand_mean=False,
             ncomps=45,
             side=self._side,
-            mano_root="manopth/mano/models",
+            mano_root="/home/ghr/panwei/pw-workspace/dex_latent/dex-ycb-toolkit/manopth/mano/models",
             use_pca=True,
         )
 
@@ -54,7 +54,7 @@ class MANOLayer(Module):
           v: A tensor of shape [B, 778, 3] containing the vertices.
           j: A tensor of shape [B, 21, 3] containing the joints.
         """
-        v, j = self._mano_layer(p, self.b.expand(p.size(0), -1), t)
+        v, j,_,_,_ = self._mano_layer(p, self.b.expand(p.size(0), -1), t)
         v /= 1000
         j /= 1000
         return v, j

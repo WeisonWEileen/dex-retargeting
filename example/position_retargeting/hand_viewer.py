@@ -213,14 +213,16 @@ class HandDatasetSAPIENViewer:
 
         if self.headless:
             video_path = Path(__file__).parent.resolve() / "data/human_hand_video.mp4"
-            writer = cv2.VideoWriter(
-                str(video_path),
-                cv2.VideoWriter_fourcc(*"mp4v"),
-                30.0,
-                (self.camera.get_width(), self.camera.get_height()),
-            )
+            # writer = cv2.VideoWriter(
+            #     str(video_path),
+            #     cv2.VideoWriter_fourcc(*"mp4v"),
+            #     30.0,
+            #     (self.camera.get_width(), self.camera.get_height()),
+            # )
 
         step_per_frame = int(60 / fps)
+        images_list = []
+
         for i in trange(frame_num):
             object_pose_frame = object_pose[i]
             hand_pose_frame = hand_pose[i]
@@ -238,7 +240,12 @@ class HandDatasetSAPIENViewer:
                 self.camera.take_picture()
                 rgb = self.camera.get_picture("Color")[..., :3]
                 rgb = (np.clip(rgb, 0, 1) * 255).astype(np.uint8)
-                writer.write(rgb[..., ::-1])
+                # writer.write(rgb[..., ::-1])
+                # change shape to (H, W, 3)
+                # rgb = rgb.transpose(2,0,1)
+                images_list.append(rgb)
+                
+
             else:
                 for _ in range(step_per_frame):
                     self.viewer.render()
@@ -247,4 +254,18 @@ class HandDatasetSAPIENViewer:
             self.viewer.paused = True
             self.viewer.render()
         else:
-            writer.release()
+            # writer.release()
+            # import iio
+            import imageio.v2 as iio
+
+            # video_path = Path(__file__).parent.resolve() / "data/human_hand_video.mp4"
+
+            # iio.mimwrite(
+            #     "/home/ghr/panwei/pw-workspace/dex-retargeting/README.mp4",
+            #     [images[i] for images in images_list],
+            # )
+            iio.mimwrite(
+                "/home/ghr/panwei/pw-workspace/dex-retargeting/README.mp4",
+                images_list,  # 直接写整个列表
+                fps=fps,  # 顺便把 fps 写清楚
+            )

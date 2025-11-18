@@ -11,22 +11,22 @@ from hand_robot_viewer import RobotHandDatasetSAPIENViewer
 from hand_viewer import HandDatasetSAPIENViewer
 
 # For numpy version compatibility
-np.bool = bool
-np.int = int
-np.float = float
-np.str = str
-np.complex = complex
-np.object = object
-np.unicode = np.unicode_
+# np.bool = bool
+# np.int = int
+# np.float = float
+# np.str = str
+# np.complex = complex
+# np.object = object
+# np.unicode = np.str_
 
 
 def viz_hand_object(robots: Optional[Tuple[RobotName]], data_root: Path, fps: int):
     dataset = DexYCBVideoDataset(data_root, hand_type="right")
     if robots is None:
-        viewer = HandDatasetSAPIENViewer(headless=False)
+        viewer = HandDatasetSAPIENViewer(headless=True)
     else:
         viewer = RobotHandDatasetSAPIENViewer(
-            list(robots), HandType.right, headless=False
+            list(robots), HandType.right, headless=True
         )
 
     # Data ID, feel free to change it to visualize different trajectory
