@@ -149,6 +149,7 @@ class RobotHandDatasetSAPIENViewer(HandDatasetSAPIENViewer):
 
         # Loop rendering
         step_per_frame = int(60 / fps)
+        images_list = []
         for i in trange(start_frame, num_frame):
             object_pose_frame = object_pose[i]
             hand_pose_frame = hand_pose[i]
@@ -185,7 +186,9 @@ class RobotHandDatasetSAPIENViewer(HandDatasetSAPIENViewer):
                 self.camera.take_picture()
                 rgb = self.camera.get_picture("Color")[..., :3]
                 rgb = (np.clip(rgb, 0, 1) * 255).astype(np.uint8)
-                writer.write(rgb[..., ::-1])
+                # writer.write(rgb[..., ::-1])
+                images_list.append(rgb)
+
             else:
                 for _ in range(step_per_frame):
                     self.viewer.render()
@@ -194,4 +197,16 @@ class RobotHandDatasetSAPIENViewer(HandDatasetSAPIENViewer):
             self.viewer.paused = True
             self.viewer.render()
         else:
-            writer.release()
+            import imageio.v2 as iio
+
+            # video_path = Path(__file__).parent.resolve() / "data/human_hand_video.mp4"
+
+            # iio.mimwrite(
+            #     "/home/ghr/panwei/pw-workspace/dex-retargeting/README.mp4",
+            #     [images[i] for images in images_list],
+            # )
+            iio.mimwrite(
+                "/home/ghr/panwei/pw-workspace/dex-retargeting/README_shadow.mp4",
+                images_list,  # 直接写整个列表
+                fps=fps,  # 顺便把 fps 写清楚
+            )

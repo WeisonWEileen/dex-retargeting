@@ -265,7 +265,7 @@ class HandDatasetSAPIENViewer:
             #     [images[i] for images in images_list],
             # )
             iio.mimwrite(
-                "/home/ghr/panwei/pw-workspace/dex-retargeting/README.mp4",
+                "/home/ghr/panwei/pw-workspace/dex-retargeting/README_obj.mp4",
                 images_list,  # 直接写整个列表
                 fps=fps,  # 顺便把 fps 写清楚
             )
