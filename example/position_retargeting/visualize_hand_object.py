@@ -19,8 +19,7 @@ from hand_viewer import HandDatasetSAPIENViewer
 # np.object = object
 # np.unicode = np.str_
 
-
-def viz_hand_object(robots: Optional[Tuple[RobotName]], data_root: Path, fps: int):
+def viz_hand_object(robots: Optional[Tuple[RobotName]], data_root: Path, fps: int, device: str = "cuda", sample_from_model: bool = False, model_path: str = None):
     dataset = DexYCBVideoDataset(data_root, hand_type="right")
     if robots is None:
         viewer = HandDatasetSAPIENViewer(headless=True)
@@ -37,10 +36,11 @@ def viz_hand_object(robots: Optional[Tuple[RobotName]], data_root: Path, fps: in
         if "pose" not in key:
             print(f"{key}: {value}")
     viewer.load_object_hand(sampled_data)
-    viewer.render_dexycb_data(sampled_data, fps)
+    # viewer.render_dexycb_data(sampled_data, fps)
+    viewer.render_dexycb_data(sampled_data, fps,device=device, sample_from_model=sample_from_model, model_path=model_path)
 
 
-def main(dexycb_dir: str, robots: Optional[List[RobotName]] = None, fps: int = 10):
+def main(dexycb_dir: str, robots: Optional[List[RobotName]] = None, fps: int = 10, device: str = "cuda", sample_from_model: bool = False, model_path: str = None):
     """
     Render the human and robot trajectories for grasping object inside DexYCB dataset.
     The human trajectory is visualized as provided, while the robot trajectory is generated from position retargeting
@@ -60,9 +60,12 @@ def main(dexycb_dir: str, robots: Optional[List[RobotName]] = None, fps: int = 1
         raise ValueError(f"Path to DexYCB dir: {data_root} does not exist.")
     else:
         print(f"Using DexYCB dir: {data_root}")
-
-    viz_hand_object(robots, data_root, fps)
+    
+    # args = tyro.cli(main)
+    viz_hand_object(robots, data_root, fps, device=device, sample_from_model=sample_from_model, model_path=model_path)
 
 
 if __name__ == "__main__":
     tyro.cli(main)
+
+

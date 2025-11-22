@@ -12,7 +12,8 @@ from sapien.asset import create_dome_envmap
 from sapien.utils import Viewer
 
 from dataset import YCB_CLASSES
-from mano_layer import MANOLayer
+# from mano_layer import MANOLayer
+# from manopth.manolayer import ManoLayer
 
 
 def compute_smooth_shading_normal_np(vertices, indices):
@@ -163,8 +164,14 @@ class HandDatasetSAPIENViewer:
         extrinsic_mat = data["extrinsics"]
         for ycb_id, ycb_mesh_file in zip(ycb_ids, ycb_mesh_files):
             self._load_ycb_object(ycb_id, ycb_mesh_file)
+        
+        from mano_layer import MANOLayer
 
-        self.mano_layer = MANOLayer("right", hand_shape.astype(np.float32))
+        self.mano_layer = MANOLayer(
+            "right",
+            hand_shape.astype(np.float32),
+            # mano_root="/home/ghr/panwei/pw-workspace/dex_latent/dex-ycb-toolkit/manopth/mano/models",
+        )
         self.mano_face = self.mano_layer.f.cpu().numpy()
         pose_vec = pt.pq_from_transform(extrinsic_mat)
         self.camera_pose = sapien.Pose(pose_vec[0:3], pose_vec[3:7]).inv()
@@ -244,7 +251,6 @@ class HandDatasetSAPIENViewer:
                 # change shape to (H, W, 3)
                 # rgb = rgb.transpose(2,0,1)
                 images_list.append(rgb)
-                
 
             else:
                 for _ in range(step_per_frame):
