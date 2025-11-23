@@ -12,7 +12,7 @@ from sapien.asset import create_dome_envmap
 from sapien.utils import Viewer
 
 from dataset import YCB_CLASSES
-# from mano_layer import MANOLayer
+from mano_layer import MANOLayer
 # from manopth.manolayer import ManoLayer
 
 
