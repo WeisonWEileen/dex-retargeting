@@ -61,6 +61,8 @@ class RobotHandDatasetSAPIENViewer(HandDatasetSAPIENViewer):
             urdf_path = Path(config.urdf_path)
             if "glb" not in urdf_path.stem:
                 urdf_path = urdf_path.with_stem(urdf_path.stem + "_glb")
+            # # HACK
+            urdf_path = Path("/home/ghr/panwei/pw-workspace/dex-retargeting/assets/robots/hands/shadow_hand/shadow_right.urdf")
             robot_urdf = urdf.URDF.load(
                 str(urdf_path), add_dummy_free_joints=True, build_scene_graph=False
             )
@@ -68,7 +70,7 @@ class RobotHandDatasetSAPIENViewer(HandDatasetSAPIENViewer):
             temp_dir = tempfile.mkdtemp(prefix="dex_retargeting-")
             temp_path = f"{temp_dir}/{urdf_name}"
             robot_urdf.write_xml_file(temp_path)
-
+            
             robot = loader.load(temp_path)
             self.robots.append(robot)
             sapien_joint_names = [joint.name for joint in robot.get_active_joints()]
@@ -257,6 +259,10 @@ class RobotHandDatasetSAPIENViewer(HandDatasetSAPIENViewer):
                 indices = retargeting.optimizer.target_link_human_indices
                 ref_value = joint[indices, :]
                 qpos = retargeting.retarget(ref_value)[retarget2sapien]
+                # HACK here
+                # qpos[:6] = np.array([0.23, 0.14, 0.09, 0.7, 0, 0])
+                # qpos[:6] = np.array([0.23, 0.14, 0.09, 0.0, 0.7, 0])
+                qpos[:6] = np.array([0.43, 0.14, 0.09, 0.7, 0.0, 0.0])
                 robot.set_qpos(qpos)
 
             self.scene.update_render()

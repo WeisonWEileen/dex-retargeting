@@ -1,6 +1,7 @@
 retargeting:
   type: position
-  urdf_path: shadow_hand/shadow_hand_right.urdf
+  # urdf_path: shadow_hand/shadow_hand_right.urdf
+  urdf_path: shadow_hand/shadow_right.urdf
 
   target_joint_names: null
   target_link_names: [ "thtip", "fftip", "mftip", "rftip", "lftip",

@@ -6,7 +6,7 @@ example/position_retargeting/visualize_hand_object.py
 --robots shadow 
 --device cuda:0 
 --sample-from-model 
---model-path /home/ghr/panwei/pw-workspace/dex_latent/output/20251113_103740_beta0.1_seed42/checkpoints/epoch_70.pth
+--model-path /home/ghr/panwei/pw-workspace/dex_latent/output/20251113_103740_beta0.1_seed42/20251113_104312_beta0.01_seed42/checkpoints/epoch_60.pth
 
 
 # manopth                   0.0.1             /home/ghr/panwei/pw-workspace/dex_latent/dex-ycb-toolkit/manopth
