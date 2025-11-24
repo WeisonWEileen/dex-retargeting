@@ -39,6 +39,39 @@ def viz_hand_object(robots: Optional[Tuple[RobotName]], data_root: Path, fps: in
     # viewer.render_dexycb_data(sampled_data, fps)
     viewer.render_dexycb_data(sampled_data, fps,device=device, sample_from_model=sample_from_model, model_path=model_path)
 
+def viz_hand_object(
+    robots: Optional[Tuple[RobotName]],
+    data_root: Path,
+    fps: int,
+    device: str = "cuda",
+    sample_from_model: bool = False,
+    model_path: str = None,
+):
+    dataset = DexYCBVideoDataset(data_root, hand_type="right")
+    if robots is None:
+        viewer = HandDatasetSAPIENViewer(headless=True)
+    else:
+        viewer = RobotHandDatasetSAPIENViewer(
+            list(robots), HandType.right, headless=True
+        )
+
+    # Data ID, feel free to change it to visualize different trajectory
+    data_id = 4
+
+    sampled_data = dataset[data_id]
+    for key, value in sampled_data.items():
+        if "pose" not in key:
+            print(f"{key}: {value}")
+    viewer.load_object_hand(sampled_data)
+    # viewer.render_dexycb_data(sampled_data, fps)
+    viewer.render_dexycb_data(
+        sampled_data,
+        fps,
+        device=device,
+        sample_from_model=sample_from_model,
+        model_path=model_path,
+    )
+
 
 def main(dexycb_dir: str, robots: Optional[List[RobotName]] = None, fps: int = 10, device: str = "cuda", sample_from_model: bool = False, model_path: str = None):
     """

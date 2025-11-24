@@ -17,3 +17,7 @@ imgui.ini
 /temp/
 *.egg-info
 *.mp4
+data/
+output/
+network/
+wandb/
