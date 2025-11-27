@@ -18,7 +18,7 @@ def save_dataset(
     sample_from_model: bool = False,
     model_path: str = None,
 ):
-    dataset = DexYCBVideoDataset(data_root, hand_type="right")
+    dataset = DexYCBVideoDataset(data_root, hand_type="right")x
     if robots is None:
         viewer = HandDatasetSAPIENViewer(headless=True)
     else:

@@ -200,6 +200,7 @@ class RobotHandDatasetSAPIENViewer(HandDatasetSAPIENViewer):
                 # )
                 # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
                 z = torch.randn(1, 12, device=device)
+                # z *= 0
                 from dex_latent.utils import rotation_6d_to_matrix
 
                 with torch.no_grad():
@@ -273,12 +274,17 @@ class RobotHandDatasetSAPIENViewer(HandDatasetSAPIENViewer):
                 else:
                     qpos = retargeting.retarget(ref_value)[retarget2sapien]
 
-                qpos = retargeting.retarget(ref_value)[retarget2sapien]
+                # qpos = retargeting.retarget(ref_value)[retarget2sapien]
 
                 # HACK here
-                # qpos[:6] = np.array([0.23, 0.14, 0.09, 0.7, 0, 0])
-                # qpos[:6] = np.array([0.23, 0.14, 0.09, 0.0, 0.7, 0])
-                qpos[:6] = np.array([0.43, 0.14, 0.09, 0.7, 0.0, 0.0])
+                qpos = qpos.detach().squeeze(0).to("cpu").cpu().numpy()
+                prefix = np.array([0.63, 0.64, 0.09, 0.7, 0, 2*1.57], dtype=np.float32)
+
+                qpos = np.concatenate([prefix, qpos])
+                # # qpos[:6] = np.array([0.23, 0.14, 0.09, 0.0, 0.7, 0])
+                # # change the qpos to numpy and move to device
+                # qpos = qpos.detach().to("cpu").cpu().numpy()
+                # qpos[0,:6] = np.array([0.43, 0.14, 0.09, 0.7, 0.0, 0.0])
                 robot.set_qpos(qpos)
 
             self.scene.update_render()
